@@ -1,0 +1,14 @@
+# See https://wiki.archlinux.org/index.php/improving_performance
+# Note: The block multi-queue (blk-mq) mode must be enabled at boot time to be able
+# to access the latest BFQ and Kyber schedulers. This is done by adding scsi_mod.use_blk_mq=1 to the kernel parameters.
+# The single-queue schedulers are no longer available once in this mode.
+#
+# SSDs can handle many IOPS and tend to perform best with simple algorithm like noop or deadline
+# while BFQ is well adapted to HDDs. The process to change I/O scheduler,
+# depending on whether the disk is rotating or not can be automated and persist across reboots with a udev rule like this:
+
+# set scheduler for non-rotating disks
+ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+# set scheduler for rotating disks
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
