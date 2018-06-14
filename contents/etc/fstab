@@ -1,0 +1,72 @@
+# 
+# /etc/fstab: static file system information
+#
+# <file system> <dir>   <type>  <options>       <dump>  <pass>
+
+# /dev/sda1 UUID=C253-5519
+UUID=E2DB-D546  /boot           vfat            ro,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro    0 1
+
+# /dev/sdb2 LABEL=swap
+/dev/mapper/swap        none            swap            defaults,pri=50         0 0
+
+# /dev/sda6 LABEL="var" 
+#UUID="1963cede-ddbe-42c3-ab41-5cbe86341a89" /var       xfs             rw      0 0
+
+# /dev/sda4 LABEL=arch
+UUID=c6e7f436-c419-4aba-a478-20deb990266c       /               xfs             rw      0 1
+
+# /dev/sda5
+
+# /dev/sda6
+# /dev/mapper/luks-data
+UUID=a80cfc8b-42ed-4560-8c09-ddde2c718992       /volumes/luks-data      xfs     rw      0 1
+LABEL=luks-hd   /volumes/luks-hd        btrfs   rw      0 1
+
+# /dev/mapper/luks-pool
+#UUID=c56031b3-af27-41f6-8103-ede1f0743ac0      /volumes/tmp            btrfs           subvol=tmp,commit=300,rw,noatime        0 0
+
+# /dev/mapper/luks-pool
+#UUID=c56031b3-af27-41f6-8103-ede1f0743ac0      /volumes/vm             btrfs           subvol=vm,nodatacow,compress=no,rw,noatime      0 0
+
+# /dev/mapper/luks-pool
+#UUID=c56031b3-af27-41f6-8103-ede1f0743ac0      /home           btrfs           subvol=home,compress=zstd,rw,noatime    0 0
+
+# Windows 8? UUID=1ED2570ED256EA13 /volumes/win ntfs-3g ro,noatime,nosuid,noexec        0 0
+
+/volumes/luks-data/var  /var  none   bind   0   0
+/volumes/luks-hd/varlog /var/log  none   bind   0   0
+#tmpfs  /var/log        tmpfs   noatime,nodev,nosuid,size=200M  0       0
+/volumes/luks-data/home /home  none   bind   0   0
+
+tmpfs   /volumes/luks-data/tmp/cache-ecc-tmpfs  tmpfs   noatime,nodev,nosuid,size=1024M 0       0
+# tmpfs /home/ecc/.cache        tmpfs   noatime,nodev,nosuid,size=1024M 0       0
+
+/volumes/luks-data/tmp/cache-ecc/dropbox /home/ecc/.dropbox  none   bind   0   0
+/volumes/luks-data/cloud/Dropbox /home/ecc/Dropbox  none   bind   0   0
+/volumes/luks-data/tmp/vartmp   /var/tmp  none   bind   0   0
+/volumes/luks-data/tmp/cache    /var/cache  none   bind   0   0
+
+#/volumes/data-win /home/ecc/bind-mounts/data-win  none   bind   0   0
+#/volumes/vm /home/ecc/bind-mounts/vm  none   bind   0   0
+#/volumes/luks-data /home/ecc/bind-mounts/luks-data  none   bind   0   0
+/etc /home/ecc/bind-mounts/system/etc  none   bind,ro   0   0
+/boot /home/ecc/bind-mounts/system/boot  none   bind,ro   0   0
+/sys/firmware/efi/efivars /home/ecc/bind-mounts/system/efivars  none   bind,ro   0   0
+
+
+#ID 256 gen 32 top level 5 path arch
+#ID 259 gen 23 top level 5 path home
+#ID 260 gen 7 top level 5 path vm
+#ID 261 gen 8 top level 5 path tmp
+#ID 262 gen 31 top level 5 path arch-var
+#ID 263 gen 15 top level 5 path data
+
+
+LABEL=main      /mnt/ego/main   btrfs   rw,noauto,noatime
+LABEL=shared /mnt/ego/shared    ntfs-3g rw,noauto,noatime
+LABEL=backup /mnt/ego/backup    ext3    rw,noauto,noatime
+
+#/mnt/music /srv/nfs4/music  none   bind   0   0
+
+vostro:/volumes/data  /mnt/vostro/data   nfs4   noauto,noatime,rsize=8192,wsize=8192,timeo=14,intr,_netdev      0 0
+vostro:/volumes/data-small  /mnt/vostro/data-small   nfs4   noauto,noatime,rsize=8192,wsize=8192,timeo=14,intr,_netdev  0 0
